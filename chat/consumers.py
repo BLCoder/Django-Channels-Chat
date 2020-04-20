@@ -117,17 +117,14 @@ class ChatConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps(message))
 
 
-
-
     def update_user_status(self, user,status,status_up):
         return Profile.objects.filter(user_id=user.pk).update(status=status,status_up=status_up)
+        
     def update_user_statuss(self, user,status):
         st_ch=get_object_or_404(Profile,user_id=user.pk)
         if st_ch.status_up==False:
-            print("11111111111111111111111111")
             return Profile.objects.filter(user_id=user.pk).update(status=status)
         else:
-            print("2222222222222222222222222")
             return Profile.objects.filter(user_id=user.pk).update(status=status,status_up=True)
 
     def send_status(self):

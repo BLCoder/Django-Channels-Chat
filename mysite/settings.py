@@ -137,3 +137,6 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+LOGIN_REDIRECT_URL = '/chat/login'
+LOGOUT_REDIRECT_URL = '/login/'
