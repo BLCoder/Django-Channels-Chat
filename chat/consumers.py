@@ -57,22 +57,23 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.accept()
-        # user = self.scope['user']
-        # print("user add   "+user.username)
-        # if user.is_authenticated:
-        #     self.update_user_status(user,True)
-        #     self.send_status()
+        user = self.scope['user']
+        print("user add   "+user.username)
+        if user.is_authenticated:
+            if user.profile.status_up==True:
+                self.update_user_status(user,True,True)
+            self.send_status()
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
             self.channel_name
         )
-        # user = self.scope['user']
-        # print("user remove   "+user.username)
-        # if user.is_authenticated:
-        #     self.update_user_status(user,False)
-        #     self.send_status()
+        user = self.scope['user']
+        print("user remove   "+user.username)
+        if user.is_authenticated:
+            self.update_user_statuss(user,False)
+            self.send_status()
 
     def receive(self, text_data):
         data = json.loads(text_data)
@@ -90,9 +91,9 @@ class ChatConsumer(WebsocketConsumer):
             st_type=data['status_type']
             if user.is_authenticated:
                 if st_type=='Online':
-                    self.update_user_status(user,True)
+                    self.update_user_status(user,True,True)
                 else:
-                    self.update_user_status(user,False)
+                    self.update_user_status(user,False,False)
                 self.send_status()
             
         else:
@@ -118,8 +119,16 @@ class ChatConsumer(WebsocketConsumer):
 
 
 
-    def update_user_status(self, user,status):
-        return Profile.objects.filter(user_id=user.pk).update(status=status)
+    def update_user_status(self, user,status,status_up):
+        return Profile.objects.filter(user_id=user.pk).update(status=status,status_up=status_up)
+    def update_user_statuss(self, user,status):
+        st_ch=get_object_or_404(Profile,user_id=user.pk)
+        if st_ch.status_up==False:
+            print("11111111111111111111111111")
+            return Profile.objects.filter(user_id=user.pk).update(status=status)
+        else:
+            print("2222222222222222222222222")
+            return Profile.objects.filter(user_id=user.pk).update(status=status,status_up=True)
 
     def send_status(self):
         users = User.objects.all()

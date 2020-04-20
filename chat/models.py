@@ -13,7 +13,7 @@ class Message(models.Model):
         return self.author.username
 
     def last_10_messages():
-        return Message.objects.order_by('-timestamp').all()
+        return Message.objects.order_by('-timestamp').all()[:10]
 
 class Userimage(models.Model):
 	person=models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='person')
@@ -26,6 +26,7 @@ class Userimage(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     status = models.BooleanField(default=False)
+    status_up = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Profile of {self.user.username}"
