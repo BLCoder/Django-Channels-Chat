@@ -77,7 +77,26 @@ class ChatConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         data = json.loads(text_data)
-        if data['command']=='fetch_image':
+        if data['command']=='typing':
+            user = data['from']
+            track=data['typing']
+            users = User.objects.all()
+            html_users = render_to_string("chat/sidebar.html",{'users':users,'auth_user':user,'track':track})
+            content = {
+                'command': 'status',
+                'html_users': html_users
+            }
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type': 'user_update',
+                    "event": "Change Status",
+                    "html_users": content
+                }
+            )
+            self.send(text_data=json.dumps(content)) 
+
+        elif data['command']=='fetch_image':
             author=data['author'];
             user=get_object_or_404(User,username=author)
 
@@ -119,7 +138,7 @@ class ChatConsumer(WebsocketConsumer):
 
     def update_user_status(self, user,status,status_up):
         return Profile.objects.filter(user_id=user.pk).update(status=status,status_up=status_up)
-        
+
     def update_user_statuss(self, user,status):
         st_ch=get_object_or_404(Profile,user_id=user.pk)
         if st_ch.status_up==False:

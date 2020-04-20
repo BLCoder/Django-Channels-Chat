@@ -1,26 +1,31 @@
 <ul id="status_id">
 
 {% for user in users %}
+  {% if request.user != user %}
+    <li class="contact">
+      <div class="wrap">
+        <span class="contact-status {{ user.profile.status|yesno:"online,offline" }} "></span>
+        <img src="{{user.person.image.url}}" alt="" />
+        <div class="meta">
+          <p class="name">{{user.username}}</p>
+          <p class="preview">
+          {% if track == "NO" and auth_user == user.username%}
+            Typing...
 
-          <li class="contact">
-            <div class="wrap">
-              <span class="contact-status {{ user.profile.status|yesno:"online,offline" }} "></span>
-              <img src="{{user.person.image.url}}" alt="" />
-              <div class="meta">
-                <p class="name">{{user.username}}</p>
-                <p class="preview">
-					{% if user.is_authenticated %}
+					{% elif user.is_authenticated %}
 						{% if user.profile.status %}
 							Online
 						{% else %}
 							Offline
-						{% endif %}
+            {% endif %}
 					{% endif %}
 
-                </p>
-              </div>
-            </div>
-          </li>
+          </p>
+        </div>
+      </div>
+    </li>
+    {% endif %}
+
 
 {% endfor %}
 </ul>
