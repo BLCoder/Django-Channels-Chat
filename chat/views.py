@@ -7,7 +7,7 @@ from .forms import registerUser
 import json
 from .models import Profile
 
-@login_required(login_url='/chat/login')
+@login_required(login_url='/login')
 def index(request):
 	if request.method=="POST":
 		room_name=request.POST.get("room-name")
@@ -15,7 +15,7 @@ def index(request):
 
 	return render(request, 'chat/index.html')
 
-@login_required(login_url='/chat/login')
+@login_required(login_url='/login')
 def room(request, room_name):
 	users=User.objects.all()
 	return render(request, 'chat/room.html', {'room_name_json': mark_safe(json.dumps(room_name)),'username': mark_safe(json.dumps(request.user.username)),'users':users})

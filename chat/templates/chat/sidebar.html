@@ -1,7 +1,6 @@
 <ul id="status_id">
 
 {% for user in users %}
-  {% if request.user != user %}
     <li class="contact">
       <div class="wrap">
         <span class="contact-status {{ user.profile.status|yesno:"online,offline" }} "></span>
@@ -9,7 +8,7 @@
         <div class="meta">
           <p class="name">{{user.username}}</p>
           <p class="preview">
-          {% if track == "NO" and auth_user == user.username%}
+          {% if track == "NO" and type_user == user.username%}
             Typing...
 
 					{% elif user.is_authenticated %}
@@ -24,8 +23,6 @@
         </div>
       </div>
     </li>
-    {% endif %}
-
 
 {% endfor %}
 </ul>

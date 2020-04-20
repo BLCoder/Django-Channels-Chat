@@ -67,7 +67,7 @@
       
       <div class="message-input">
         <div class="wrap">
-        <input id="chat-message-input" type="text" placeholder="Write your message..." />
+        <input id="chat-message-input" autocomplete="off" type="text" placeholder="Write your message..." />
         <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
         <button id="chat-message-submit" class="submit">
           <i class="fa fa-paper-plane" aria-hidden="true"></i>
@@ -86,7 +86,7 @@
 
     var chatSocket = new ReconnectingWebSocket(
         'ws://' + window.location.host +
-        '/ws/chat/' + roomName + '/');
+        '/ws/' + roomName + '/');
 
     chatSocket.onopen = function(e) {
       fetchMessages();
@@ -134,11 +134,13 @@
     document.querySelector('#chat-message-submit').onclick = function(e) {
         var messageInputDom = document.getElementById('chat-message-input');
         var message = messageInputDom.value;
-        chatSocket.send(JSON.stringify({
+        if(message!=''){
+          chatSocket.send(JSON.stringify({
             'command': 'new_message',
             'message': message,
             'from': username
-        }));
+           }));
+        }
 
         messageInputDom.value = '';
     };
@@ -174,8 +176,8 @@
         msgListTag.appendChild(pTag);
         //pTag.textContent = author+' : '+data.content;
       } else {
-        pTag.textContent = data.content+' : ';
-        pName.textContent = author;
+        pTag.textContent = data.content;
+        pName.textContent = ' : '+author;
 
         msgListTag.appendChild(pName);
         msgListTag.appendChild(pTag)

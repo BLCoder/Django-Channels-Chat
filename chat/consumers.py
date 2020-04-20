@@ -78,10 +78,11 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data):
         data = json.loads(text_data)
         if data['command']=='typing':
-            user = data['from']
+            type_user = data['from']
             track=data['typing']
+            auth_user = self.scope['user']
             users = User.objects.all()
-            html_users = render_to_string("chat/sidebar.html",{'users':users,'auth_user':user,'track':track})
+            html_users = render_to_string("chat/sidebar.html",{'auth_user':auth_user,'users':users,'type_user':type_user,'track':track})
             content = {
                 'command': 'status',
                 'html_users': html_users
@@ -147,8 +148,9 @@ class ChatConsumer(WebsocketConsumer):
             return Profile.objects.filter(user_id=user.pk).update(status=status,status_up=True)
 
     def send_status(self):
+        auth_user = self.scope['user']
         users = User.objects.all()
-        html_users = render_to_string("chat/sidebar.html",{'users':users})
+        html_users = render_to_string("chat/sidebar.html",{'auth_user':auth_user,'users':users})
         content = {
             'command': 'status',
             'html_users': html_users
