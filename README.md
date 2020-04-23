@@ -1,5 +1,7 @@
 # Django Channels Chat
 A small functional group message center application built using Django Channels.
+
+
 ![bandicam-2020-04-20-22-32-48-437-_online-video-cutter com_](https://user-images.githubusercontent.com/20891667/80091951-ca550180-8583-11ea-8c93-7a43f9f349ee.gif)
 
 
