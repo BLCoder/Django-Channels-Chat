@@ -1,6 +1,6 @@
 # Django Channels Chat
 A small functional group message center application built using Django Channels.
-![file](https://user-images.githubusercontent.com/20891667/80080050-ddaba100-8572-11ea-977c-f1f9f49a00e4.gif)
+![3](https://user-images.githubusercontent.com/20891667/80091830-97127280-8583-11ea-8668-415f4205db64.gif)
 
 
   ## Architecture ##
